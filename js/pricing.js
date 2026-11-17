@@ -1,25 +1,33 @@
-// פונקציה המחזירה את מכסת הכרטיסים המקסימלית בהתאם לחברות מועדון
+// מחירון TicketRush
+const TICKET_PRICE = 350; // ₪ לכרטיס
+const SERVICE_FEE = 12;   // ₪ עמלת שירות לכל כרטיס
+const MAX_TICKETS = 8;    // מקסימום כרטיסים להזמנה
+const MEMBER_DISCOUNT = 0.2;
+const STUDENT_DISCOUNT = 0.15;
+
 function maxTickets(isMember) {
-  return isMember ? 4 : 8;
+  return isMember ? 4 : MAX_TICKETS;
 }
 
-// פונקציה לחישוב הסכום הכולל של ההזמנה
-function calcTotal(qty, isMember = false) {
+function calcTotal(qty, isMember = false, isStudent = false) {
   const max = maxTickets(isMember);
-  
-  // בדיקה האם הכמות חוקית (פחות מ-1, או חורגת מהמכסה המותרת)
   if (qty < 1 || qty > max) {
     return null;
   }
-  
-  // הגדרת מחיר כרטיס לפי זכאות להנחה ועמלת שירות קבועה
-  const ticketPrice = isMember ? 280 : 350; // חברת מועדון מקבלת הנחה ל-280 ₪ (במקום 350 ₪)
-  const serviceFee = 12; // עמלת שירות לכל כרטיס
-  
-  // חישוב סופי
-  return qty * (ticketPrice + serviceFee);
+
+  const discount = isMember ? MEMBER_DISCOUNT : isStudent ? STUDENT_DISCOUNT : 0;
+  const ticketPrice = TICKET_PRICE * (1 - discount);
+  return qty * (ticketPrice + SERVICE_FEE);
 }
 
 if (typeof module !== 'undefined') {
-  module.exports = { maxTickets, calcTotal };
+  module.exports = {
+    TICKET_PRICE,
+    SERVICE_FEE,
+    MAX_TICKETS,
+    MEMBER_DISCOUNT,
+    STUDENT_DISCOUNT,
+    maxTickets,
+    calcTotal
+  };
 }
